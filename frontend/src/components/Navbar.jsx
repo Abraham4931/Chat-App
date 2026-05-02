@@ -1,12 +1,19 @@
 import { useAuthStore } from "../store/useAuthStore.js";
-import { Settings, User, MessageSquare, LogOut } from "lucide-react";
+import { Settings, User, MessageSquare, LogOut, Sun, Moon } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useThemeStore } from "../store/useThemeStore.js";
 
 const Navbar = () => {
   const { logout, authUser } = useAuthStore();
+  const { theme, setTheme } = useThemeStore();
+
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
+
   return (
     <header
-      className="border-b border-base-300 fixed w-full top-0 z=40
+      className="border-b border-base-300 fixed w-full top-0 z-40
       backdrop-blur-lg bg-base-100/80"
     >
       <div className="container mx-auto px-4 h-16">
@@ -20,9 +27,18 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="btn btn-sm transition-colors"
+              aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+            >
+              {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
+            </button>
+
             <Link
               to={`/settings`}
-              className={`btn btn-sm gap-2 transition-colors`}
+              className="btn btn-sm gap-2 transition-colors"
             >
               <Settings className="size-4" />
               <span className="hidden sm:inline">Settings</span>
@@ -35,7 +51,7 @@ const Navbar = () => {
                   <span className="hidden sm:inline">Profile</span>
                 </Link>
 
-                <button className="flex gap-2 items-center" onClick={logout}>
+                <button className="flex gap-2 items-center btn btn-sm btn-ghost" onClick={logout}>
                   <LogOut className="size-5" />
                   <span className="hidden sm:inline">Logout</span>
                 </button>
@@ -45,7 +61,7 @@ const Navbar = () => {
         </div>
       </div>
     </header>
-  )
-}
+  );
+};
 
 export default Navbar;

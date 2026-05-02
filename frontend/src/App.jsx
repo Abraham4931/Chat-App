@@ -23,6 +23,7 @@ const App = () => {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
+    document.body.setAttribute('data-theme', theme);
   }, [theme]);
 
   console.log({ authUser });
@@ -34,7 +35,7 @@ const App = () => {
   )
 
   return (
-    <div data-theme={theme}>
+    <div className="min-h-screen">
       <Navbar />
 
       <Routes>
