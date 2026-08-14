@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { useChatStore } from "../store/useChatStore.js";
 import { useSocketStore } from "../store/useSocketStore.js";
+import { useAuthStore } from "../store/useAuthStore.js";
 import SidebarSkeleton from "./skeletons/SidebarSkeleton.jsx";
 import { Users } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Sidebar = () => {
     const { getUsers, users, selectedUser, setSelectedUser, isUserLoading } = useChatStore();
     const { onlineUsers } = useSocketStore();
+    const { authUser } = useAuthStore();
     const [showOnlineOnly, setShowOnlineOnly] = useState(false);
 
     useEffect(() => {
@@ -85,6 +88,30 @@ const Sidebar = () => {
                     </div>
                 )}
             </div>
+
+            {/* Logged-in user profile at the bottom */}
+            {authUser && (
+                <div className="border-t border-base-300 p-3 mt-auto">
+                    <Link
+                        to="/profile"
+                        className="flex items-center gap-3 hover:bg-base-300 rounded-lg p-2 transition-colors"
+                    >
+                        <div className="relative mx-auto lg:mx-0">
+                            <img
+                                src={authUser.profilePic || "/avatar.png"}
+                                alt={authUser.fullName}
+                                className="size-8 rounded-full object-cover"
+                            />
+                            {/* logged-in user is always online */}
+                            <span className="absolute bottom-0 right-0 size-2.5 bg-green-500 rounded-full ring-2 ring-base-100" />
+                        </div>
+                        <div className="hidden lg:block text-left min-w-0">
+                            <div className="font-medium truncate text-sm">{authUser.fullName}</div>
+                            <div className="text-xs text-green-500">Online</div>
+                        </div>
+                    </Link>
+                </div>
+            )}
         </aside>
     );
 };
